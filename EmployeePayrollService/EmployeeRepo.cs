@@ -221,11 +221,11 @@ namespace EmployeePayrollService
                             string Gender = sqlDataReader.GetString(0);
                             int COUNT = sqlDataReader.GetInt32(1);
                             double SUM = (double)sqlDataReader.GetDecimal(2);
-                            double MAX= (double)sqlDataReader.GetDecimal(3);
-                            double MIN= (double)sqlDataReader.GetDecimal(4);
-                           
-                            Console.WriteLine("Gender: "+Gender+"\nCount: "+COUNT+"\nSum: "+SUM+
-                                "\nMax: "+MAX+"\nMin: "+MIN);
+                            double MAX = (double)sqlDataReader.GetDecimal(3);
+                            double MIN = (double)sqlDataReader.GetDecimal(4);
+
+                            Console.WriteLine("Gender: " + Gender + "\nCount: " + COUNT + "\nSum: " + SUM +
+                                "\nMax: " + MAX + "\nMin: " + MIN);
                             Console.WriteLine("\n");
                         }
                     }
@@ -297,5 +297,44 @@ namespace EmployeePayrollService
                 this.sqlconnection.Close();
             }
         }
+
+        /// <summary>
+        /// UC8 Ability to remove Employee from the Payroll
+        /// </summary>
+        /// <returns></returns>
+        public bool RemoveEmployee()
+        {
+            try
+            {
+                EmployeeModel employeeModel = new EmployeeModel();
+                using (this.sqlconnection)
+                {
+                    string query = @"DELETE FROM Employee_Payroll 
+                                    WHERE EmpId=6;";
+                    
+                    SqlCommand sqlCommand = new SqlCommand(query, this.sqlconnection);
+
+                    this.sqlconnection.Open();
+                    
+                    var result = sqlCommand.ExecuteNonQuery();
+                    
+                    this.sqlconnection.Close();
+                    
+                    if (result != 0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+            finally
+            {
+                this.sqlconnection.Close();
+            }
+        } 
     }
 }

@@ -27,7 +27,9 @@ namespace EmployeePayrollService
             employeeModel.Income_Tax = 7654.00;
             employeeModel.Net_Pay = 6543.00;
 
-            employeeRepo.AddEmployee(employeeModel);
+            //employeeRepo.AddEmployee(employeeModel);
+
+            employeeRepo.RemoveEmployee();
         }
     }
 }
