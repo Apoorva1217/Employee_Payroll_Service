@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 
@@ -81,6 +82,8 @@ namespace EmployeePayrollService
         /// <summary>
         /// UC3 and UC4 Ability to update the salary i.e. the base pay for Employee Terisa to 3000000.00 and sync it with Database using ADO.NET ConnectionString
         /// </summary>
+        /// <param name="updateModel"></param>
+        /// <returns></returns>
         public int UpdateEmployeeSalary(SalaryUpdateModel updateModel)
         {
             int salary = 0;
@@ -232,6 +235,57 @@ namespace EmployeePayrollService
                     }
                     sqlDataReader.Close();
                     this.sqlconnection.Close();
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+            finally
+            {
+                this.sqlconnection.Close();
+            }
+        }
+
+        /// <summary>
+        /// UC7 Ability to add a new Employee to the Payroll
+        /// </summary>
+        /// <param name="employeeModel"></param>
+        /// <returns></returns>
+        public bool AddEmployee(EmployeeModel employeeModel)
+        {
+            try
+            {
+                using (this.sqlconnection)
+                {
+                    SqlCommand sqlCommand = new SqlCommand("SpAddEmployee", this.sqlconnection);
+
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                    sqlCommand.Parameters.AddWithValue("@EmpId", employeeModel.EmpId);
+                    sqlCommand.Parameters.AddWithValue("@EmpName", employeeModel.EmpName);
+                    sqlCommand.Parameters.AddWithValue("@Salary", employeeModel.Salary);
+                    sqlCommand.Parameters.AddWithValue("@Start_Date", employeeModel.Start_Date);
+                    sqlCommand.Parameters.AddWithValue("@Gender", employeeModel.Gender);
+                    sqlCommand.Parameters.AddWithValue("@Phone_Number", employeeModel.Phone_Number);
+                    sqlCommand.Parameters.AddWithValue("@Employee_Address", employeeModel.Employee_Address);
+                    sqlCommand.Parameters.AddWithValue("@Department", employeeModel.Department);
+                    sqlCommand.Parameters.AddWithValue("@Basic_Pay", employeeModel.Basic_Pay);
+                    sqlCommand.Parameters.AddWithValue("@Deductions", employeeModel.Deductions);
+                    sqlCommand.Parameters.AddWithValue("@Taxable_Pay", employeeModel.Taxable_Pay);
+                    sqlCommand.Parameters.AddWithValue("@Income_Pay", employeeModel.Income_Tax);
+                    sqlCommand.Parameters.AddWithValue("@Net_Pay", employeeModel.Net_Pay);
+
+                    this.sqlconnection.Open();
+
+                    var result = sqlCommand.ExecuteNonQuery();
+                    this.sqlconnection.Close();
+
+                    if (result != 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
             }
             catch (Exception exception)
