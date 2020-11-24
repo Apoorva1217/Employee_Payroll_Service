@@ -77,5 +77,38 @@ namespace EmployeePayrollService
                 this.sqlconnection.Close();
             }
         }
+
+        /// <summary>
+        /// UC3 Ability to update the salary i.e. the base pay for Employee Terisa to 3000000.00 and sync it with Database
+        /// </summary>
+        public bool UpdateEmployeeSalary(string EmpName)
+        {
+            try
+            {
+                EmployeeModel employeeModel = new EmployeeModel();
+                using (this.sqlconnection)
+                {
+                    string query = @"UPDATE Employee_Payroll SET Basic_Pay=3000000.00 WHERE EmpName='" + EmpName + "';";
+                    SqlCommand sqlCommand = new SqlCommand(query, this.sqlconnection);
+                    this.sqlconnection.Open();
+                    var result = sqlCommand.ExecuteNonQuery();
+                    this.sqlconnection.Close();
+
+                    if (result != 0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+            finally
+            {
+                this.sqlconnection.Close();
+            }
+        }
     }
 }
