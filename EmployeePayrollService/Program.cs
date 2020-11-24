@@ -8,8 +8,8 @@ namespace EmployeePayrollService
         {
             Console.WriteLine("Welcome to Employee Payroll Service!");
             EmployeeRepo employeeRepo = new EmployeeRepo();
-            employeeRepo.GetAllEmployee();
-            employeeRepo.UpdateEmployeeSalary("Terisa");
+            //employeeRepo.GetAllEmployee();
+            employeeRepo.GetAllEmployeeInADataRange();
         }
     }
 }
