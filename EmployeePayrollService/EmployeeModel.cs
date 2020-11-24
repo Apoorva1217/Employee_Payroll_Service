@@ -19,5 +19,7 @@ namespace EmployeePayrollService
         public double Taxable_Pay { get; set; }
         public double Income_Tax { get; set; }
         public double Net_Pay { get; set; }
+        public string SalaryMonth { get; set; }
+        public int SalaryId { get; set; }
     }
 }

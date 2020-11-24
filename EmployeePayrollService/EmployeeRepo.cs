@@ -79,26 +79,44 @@ namespace EmployeePayrollService
         }
 
         /// <summary>
-        /// UC3 Ability to update the salary i.e. the base pay for Employee Terisa to 3000000.00 and sync it with Database
+        /// UC4 Ability to update the salary i.e. the base pay for Employee Terisa to 3000000.00 and sync it with Database using ADO.NET ConnectionString
         /// </summary>
-        public bool UpdateEmployeeSalary(string EmpName)
+        public int UpdateEmployeeSalary(SalaryUpdateModel updateModel)
         {
+            int salary = 0;
             try
             {
                 EmployeeModel employeeModel = new EmployeeModel();
                 using (this.sqlconnection)
                 {
-                    string query = @"UPDATE Employee_Payroll SET Basic_Pay=3000000.00 WHERE EmpName='" + EmpName + "';";
-                    SqlCommand sqlCommand = new SqlCommand(query, this.sqlconnection);
-                    this.sqlconnection.Open();
-                    var result = sqlCommand.ExecuteNonQuery();
-                    this.sqlconnection.Close();
+                    SqlCommand command = new SqlCommand("spUpdateEmployeeSalary", sqlconnection);
 
-                    if (result != 0)
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@SalaryId", updateModel.SalaryId);
+                    command.Parameters.AddWithValue("@SalaryMonth", updateModel.SalaryMonth);
+                    command.Parameters.AddWithValue("@Salary", updateModel.Salary);
+                    command.Parameters.AddWithValue("@EmpId", updateModel.EmpId);
+
+                    this.sqlconnection.Open();
+
+                    SqlDataReader sqlDataReader = command.ExecuteReader();
+
+                    if (sqlDataReader.HasRows)
                     {
-                        return true;
+                        while (sqlDataReader.Read())
+                        {
+                            employeeModel.EmpId = Convert.ToInt32(sqlDataReader["EmpId"]);
+                            employeeModel.EmpName = sqlDataReader["EmpName"].ToString();
+                            employeeModel.SalaryMonth = sqlDataReader["SalaryMonth"].ToString();
+                            employeeModel.Salary = Convert.ToInt32(sqlDataReader["Salary"]);
+                            employeeModel.SalaryId = Convert.ToInt32(sqlDataReader["SalaryId"]);
+
+                            Console.WriteLine("{0},{1},{2},{3},{4}",
+                                employeeModel.EmpId, employeeModel.EmpName, employeeModel.SalaryMonth,
+                                employeeModel.Salary, employeeModel.SalaryId);
+                            salary = (int)employeeModel.Salary;
+                        }
                     }
-                    return false;
                 }
             }
             catch (Exception exception)
@@ -109,6 +127,7 @@ namespace EmployeePayrollService
             {
                 this.sqlconnection.Close();
             }
+            return salary;
         }
     }
 }
