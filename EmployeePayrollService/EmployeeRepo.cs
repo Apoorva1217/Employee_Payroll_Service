@@ -191,5 +191,57 @@ namespace EmployeePayrollService
                 this.sqlconnection.Close();
             }
         }
+
+        /// <summary>
+        /// UC6 Ability to find sum, average, min, max and number of male and female employees
+        /// </summary>
+        public void GetDataByGroupByGender()
+        {
+            try
+            {
+                EmployeeModel employeeModel = new EmployeeModel();
+                using (this.sqlconnection)
+                {
+                    string query = @"SELECT Gender,COUNT(Salary),
+                                    SUM(Salary),MAX(Salary),MIN(Salary)FROM Employee_Payroll 
+                                    GROUP BY Gender;";
+                    SqlCommand sqlCommand = new SqlCommand(query, this.sqlconnection);
+
+                    this.sqlconnection.Open();
+
+                    SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+
+                    if (sqlDataReader.HasRows)
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            string Gender = sqlDataReader.GetString(0);
+                            int COUNT = sqlDataReader.GetInt32(1);
+                            double SUM = (double)sqlDataReader.GetDecimal(2);
+                            double MAX= (double)sqlDataReader.GetDecimal(3);
+                            double MIN= (double)sqlDataReader.GetDecimal(4);
+                           
+                            Console.WriteLine("Gender: "+Gender+"\nCount: "+COUNT+"\nSum: "+SUM+
+                                "\nMax: "+MAX+"\nMin: "+MIN);
+                            Console.WriteLine("\n");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No data found");
+                    }
+                    sqlDataReader.Close();
+                    this.sqlconnection.Close();
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+            finally
+            {
+                this.sqlconnection.Close();
+            }
+        }
     }
 }
