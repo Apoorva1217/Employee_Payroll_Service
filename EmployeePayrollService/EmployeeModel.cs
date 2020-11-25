@@ -21,5 +21,8 @@ namespace EmployeePayrollService
         public double Net_Pay { get; set; }
         public string SalaryMonth { get; set; }
         public int SalaryId { get; set; }
+        public int DeptId { get;  set; }
+        public string  DeptName { get;  set; }
+        public string DeptLocation { get;  set; }
     }
 }

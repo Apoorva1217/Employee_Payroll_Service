@@ -9,13 +9,13 @@ namespace EmployeePayrollService
     public class EmployeeRepo
     {
         /// <summary>
-        /// UC1 Ability to create a payroll service database and have java program connect to database
+        /// Ability to create a payroll service database and have java program connect to database
         /// </summary>
         public static string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Payroll_Service;Integrated Security=True";
         SqlConnection sqlconnection = new SqlConnection(connectionString);
 
         /// <summary>
-        /// UC2 Ability for Employee Payroll Service to retrieve the Employee Payroll from the Database
+        /// Ability for Employee Payroll Service to retrieve the Employee Payroll from the Database
         /// </summary>
         public void GetAllEmployee()
         {
@@ -80,7 +80,7 @@ namespace EmployeePayrollService
         }
 
         /// <summary>
-        /// UC3 and UC4 Ability to update the salary i.e. the base pay for Employee Terisa to 3000000.00 and sync it with Database using ADO.NET ConnectionString
+        /// Ability to update the salary i.e. the base pay for Employee Terisa to 3000000.00 and sync it with Database using ADO.NET ConnectionString
         /// </summary>
         /// <param name="updateModel"></param>
         /// <returns></returns>
@@ -134,7 +134,7 @@ namespace EmployeePayrollService
         }
 
         /// <summary>
-        /// UC5 Ability to retrieve all employees who have joined in a particular data range from the payroll service database
+        /// Ability to retrieve all employees who have joined in a particular data range from the payroll service database
         /// </summary>
         public void GetAllEmployeeInADataRange()
         {
@@ -196,7 +196,7 @@ namespace EmployeePayrollService
         }
 
         /// <summary>
-        /// UC6 Ability to find sum, average, min, max and number of male and female employees
+        /// Ability to find sum, average, min, max and number of male and female employees
         /// </summary>
         public void GetDataByGroupByGender()
         {
@@ -248,7 +248,7 @@ namespace EmployeePayrollService
         }
 
         /// <summary>
-        /// UC7 Ability to add a new Employee to the Payroll
+        /// Ability to add a new Employee to the Payroll
         /// </summary>
         /// <param name="employeeModel"></param>
         /// <returns></returns>
@@ -299,7 +299,7 @@ namespace EmployeePayrollService
         }
 
         /// <summary>
-        /// UC8 Ability to remove Employee from the Payroll
+        /// Ability to remove Employee from the Payroll
         /// </summary>
         /// <returns></returns>
         public bool RemoveEmployee()
@@ -311,15 +311,15 @@ namespace EmployeePayrollService
                 {
                     string query = @"DELETE FROM Employee_Payroll 
                                     WHERE EmpId=6;";
-                    
+
                     SqlCommand sqlCommand = new SqlCommand(query, this.sqlconnection);
 
                     this.sqlconnection.Open();
-                    
+
                     var result = sqlCommand.ExecuteNonQuery();
-                    
+
                     this.sqlconnection.Close();
-                    
+
                     if (result != 0)
                     {
                         return true;
@@ -335,6 +335,162 @@ namespace EmployeePayrollService
             {
                 this.sqlconnection.Close();
             }
-        } 
+        }
+
+        /// <summary>
+        /// Get all Employee Details from Employee table
+        /// </summary>
+        public void GetAllEmployeeDetails()
+        {
+            try
+            {
+                EmployeeModel employeeModel = new EmployeeModel();
+                using (this.sqlconnection)
+                {
+                    string query = @"SELECT * FROM Employee;";
+                    SqlCommand sqlCommand = new SqlCommand(query, this.sqlconnection);
+
+                    this.sqlconnection.Open();
+
+                    SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+
+                    if (sqlDataReader.HasRows)
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            employeeModel.EmpId = sqlDataReader.GetInt32(0);
+                            employeeModel.EmpName = sqlDataReader.GetString(1);
+                            employeeModel.Employee_Address = sqlDataReader.GetString(2);
+                            employeeModel.Gender = Convert.ToChar(sqlDataReader.GetString(3));
+                            employeeModel.Phone_Number = sqlDataReader.GetString(4);
+
+                            Console.WriteLine("Employee Id: " + employeeModel.EmpId + "\nEmployee Name: " + employeeModel.EmpName +
+                                "\nEmployee Address: " + employeeModel.Employee_Address + 
+                                "\nGender: " + employeeModel.Gender+"\nPhone Number:"+employeeModel.Phone_Number);
+                            Console.WriteLine("\n");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No data found");
+                    }
+                    sqlDataReader.Close();
+                    this.sqlconnection.Close();
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+            finally
+            {
+                this.sqlconnection.Close();
+            }
+        }
+
+        /// <summary>
+        /// Get Depatment details from Department table
+        /// </summary>
+        public void GetAllDepartment()
+        {
+            try
+            {
+                EmployeeModel employeeModel = new EmployeeModel();
+                using (this.sqlconnection)
+                {
+                    string query = @"SELECT * FROM Department;";
+                    SqlCommand sqlCommand = new SqlCommand(query, this.sqlconnection);
+
+                    this.sqlconnection.Open();
+
+                    SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+
+                    if (sqlDataReader.HasRows)
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            employeeModel.EmpId = sqlDataReader.GetInt32(0);
+                            employeeModel.DeptId = sqlDataReader.GetInt32(1);
+                            employeeModel.DeptName = sqlDataReader.GetString(2);
+                            employeeModel.DeptLocation = sqlDataReader.GetString(3);
+
+                            Console.WriteLine("EmpId: " + employeeModel.EmpId + "\nDeptId: " + employeeModel.DeptId + 
+                                "\nDeptName: " + employeeModel.DeptName +"\nDeptLocation: " + employeeModel.DeptLocation);
+                            Console.WriteLine("\n");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No data found");
+                    }
+                    sqlDataReader.Close();
+                    this.sqlconnection.Close();
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+            finally
+            {
+                this.sqlconnection.Close();
+            }
+        }
+
+        /// <summary>
+        /// Get Employee Salary from Salary table
+        /// </summary>
+        public void GetEmployeeSalary()
+        {
+            try
+            {
+                EmployeeModel employeeModel = new EmployeeModel();
+                using (this.sqlconnection)
+                {
+                    string query = @"SELECT * FROM Salary;";
+                    SqlCommand sqlCommand = new SqlCommand(query, this.sqlconnection);
+
+                    this.sqlconnection.Open();
+
+                    SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+
+                    if (sqlDataReader.HasRows)
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            employeeModel.EmpId = sqlDataReader.GetInt32(0);
+                            employeeModel.SalaryId = sqlDataReader.GetInt32(1);
+                            employeeModel.Salary = (double)sqlDataReader.GetDecimal(2);
+                            employeeModel.Basic_Pay = (double)sqlDataReader.GetDecimal(3);
+                            employeeModel.Deductions = (double)sqlDataReader.GetDecimal(4);
+                            employeeModel.Taxable_Pay = (double)sqlDataReader.GetDecimal(5);
+                            employeeModel.Income_Tax = (double)sqlDataReader.GetDecimal(6);
+                            employeeModel.Net_Pay = (double)sqlDataReader.GetDecimal(7);
+                            employeeModel.SalaryMonth = sqlDataReader.GetString(8);
+
+                            Console.WriteLine("EmpId: " + employeeModel.EmpId + "\nSalaryId: " + employeeModel.Salary +
+                                "\nBasic Pay:" + employeeModel.Basic_Pay + "\nDeductions:" + employeeModel.Deductions +
+                                "\nTaxable Pay:" + employeeModel.Taxable_Pay + "\nIncome Pay:" + employeeModel.Income_Tax +
+                                "\nNet Pay:" + employeeModel.Net_Pay + "\nSalary Month" + employeeModel.SalaryMonth);
+                            Console.WriteLine("\n");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No data found");
+                    }
+                    sqlDataReader.Close();
+                    this.sqlconnection.Close();
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+            finally
+            {
+                this.sqlconnection.Close();
+            }
+        }
     }
 }
