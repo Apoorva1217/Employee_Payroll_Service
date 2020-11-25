@@ -49,7 +49,8 @@ namespace EmployeePayrollService
             employeeRepo.GetAllDepartment();
             ///Get Salary of Employee from Salary table
             employeeRepo.GetEmployeeSalary();
-            
+            ///Get Data by Gender using joins
+            employeeRepo.GetDataByGroupByGenderER();
         }
     }
 }
