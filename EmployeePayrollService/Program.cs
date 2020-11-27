@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace EmployeePayrollService
 {
@@ -12,13 +13,13 @@ namespace EmployeePayrollService
             SalaryUpdateModel updateModel = new SalaryUpdateModel();
             
             ///Get All Employee present in Employee_Payroll table
-            employeeRepo.GetAllEmployee();
+            //employeeRepo.GetAllEmployee();
             ///Update Employee Salary
-            employeeRepo.UpdateEmployeeSalary(updateModel);
+            //employeeRepo.UpdateEmployeeSalary(updateModel);
             ///Get All Employee in a particular data range
-            employeeRepo.GetAllEmployeeInADataRange();
+            //employeeRepo.GetAllEmployeeInADataRange();
             ///Get data by Gender
-            employeeRepo.GetDataByGroupByGender();
+            //employeeRepo.GetDataByGroupByGender();
             
             ///Add Employee Details
             employeeModel.EmpName = "Appu";
@@ -40,17 +41,21 @@ namespace EmployeePayrollService
             employeeModel.SalaryMonth = "Jan";
             
             ///Add Employee in Employee_Payroll table
-            employeeRepo.AddEmployee(employeeModel);
+            //employeeRepo.AddEmployee(employeeModel);
             ///Remove particular employee entry using EmpId
-            employeeRepo.RemoveEmployee();
+            //employeeRepo.RemoveEmployee();
             ///Get Employee Details present in Employee table
-            employeeRepo.GetAllEmployeeDetails();
+            //employeeRepo.GetAllEmployeeDetails();
             ///Get Department details from Department table
-            employeeRepo.GetAllDepartment();
+            //employeeRepo.GetAllDepartment();
             ///Get Salary of Employee from Salary table
-            employeeRepo.GetEmployeeSalary();
+            //employeeRepo.GetEmployeeSalary();
             ///Get Data by Gender using joins
-            employeeRepo.GetDataByGroupByGenderER();
+            //employeeRepo.GetDataByGroupByGenderER();
+
+            EmployeePayrollOperations employeePayrollOperations = new EmployeePayrollOperations();
+            List<EmployeeModel> employeePayrollDataList = new List<EmployeeModel>();
+            employeePayrollOperations.AddEmployeeToPayroll(employeePayrollDataList);
         }
     }
 }

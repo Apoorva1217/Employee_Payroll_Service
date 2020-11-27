@@ -9,7 +9,7 @@ namespace EmployeePayrollService
     public class EmployeeRepo
     {
         /// <summary>
-        /// Ability to create a payroll service database and have java program connect to database
+        /// Ability to create a payroll service database and have c# program connect to database
         /// </summary>
         public static string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Payroll_Service;Integrated Security=True";
         SqlConnection sqlconnection = new SqlConnection(connectionString);
