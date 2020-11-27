@@ -27,7 +27,7 @@ namespace EmployeePayrollServiceTests
         }
 
         /// <summary>
-        /// Ability to add multiple employee without thread
+        /// Ability to add multiple employee with and without thread
         /// </summary>
         [TestMethod]
         public void GivenEmployee_WhenAddedToList_ShouldMatchEmployeeEntries()
@@ -51,6 +51,11 @@ namespace EmployeePayrollServiceTests
             employeePayrollOperations.AddEmployeeToPayroll(employeeModelList);
             DateTime StopDateTime = DateTime.Now;
             Console.WriteLine("Duration without thread:" + (StopDateTime - StartDateTime));
+
+            DateTime StartDateTimeThread = DateTime.Now;
+            employeePayrollOperations.AddEmployeeToPayrollWithThread(employeeModelList);
+            DateTime StopDateTimeThread = DateTime.Now;
+            Console.WriteLine("Duration with thread:" + (StopDateTimeThread - StartDateTimeThread));
         }
     }
 }
