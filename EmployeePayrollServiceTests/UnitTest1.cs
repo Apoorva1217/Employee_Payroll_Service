@@ -57,5 +57,19 @@ namespace EmployeePayrollServiceTests
             DateTime StopDateTimeThread = DateTime.Now;
             Console.WriteLine("Duration with thread:" + (StopDateTimeThread - StartDateTimeThread));
         }
+
+        /// <summary>
+        /// Ability to add multiple employee with thread with synchronization
+        /// </summary>
+        [TestMethod]
+        public void GivenEmployeeAddedIntoList_WithThreadWithSynchronization()
+        {
+            EmployeePayrollOperations employeePayrollOperations = new EmployeePayrollOperations();
+            List<EmployeeModel> employeeModelList = new List<EmployeeModel>();
+            DateTime startDateTime = DateTime.Now;
+            employeePayrollOperations.AddEmployeeToPayrollWithThreadWithSynchronization(employeeModelList);
+            DateTime stopDateTime = DateTime.Now;
+            Console.WriteLine("Duration with thread:" + (stopDateTime - startDateTime));
+        }
     }
 }

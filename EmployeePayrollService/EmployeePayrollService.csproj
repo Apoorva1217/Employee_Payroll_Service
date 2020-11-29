@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    <PackageReference Include="System.Threading" Version="4.3.0" />
   </ItemGroup>
 
 </Project>

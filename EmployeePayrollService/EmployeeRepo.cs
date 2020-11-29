@@ -143,7 +143,8 @@ namespace EmployeePayrollService
                 EmployeeModel employeeModel = new EmployeeModel();
                 using (this.sqlconnection)
                 {
-                    string query = @"SELECT * FROM Employee_Payroll WHERE Start_Date between cast('2019-01-01' AS DATE) and SYSDATETIME();";
+                    string query = @"SELECT * FROM Employee_Payroll WHERE Start_Date between cast('2019-01-01' AS DATE) 
+                                    and SYSDATETIME();";
                     SqlCommand sqlCommand = new SqlCommand(query, this.sqlconnection);
 
                     this.sqlconnection.Open();
