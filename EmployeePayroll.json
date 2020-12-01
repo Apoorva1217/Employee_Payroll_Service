@@ -1,0 +1,28 @@
+{
+  "employeePayroll": [
+    {
+      "EmpId": 1,
+      "EmpName": "Apoorva",
+      "Salary": "500000.00"
+    },
+    {
+      "EmpId": 2,
+      "EmpName": "Bill",
+      "Salary": "350000.00"
+    },
+    {
+      "EmpId": 3,
+      "EmpName": "Terisa",
+      "Salary": "400000.00"
+    },
+	{
+      "EmpId": 4,
+      "EmpName": "Mark",
+      "Salary": "600000.00"
+    },{
+      "EmpId": 5,
+      "EmpName": "Charlie",
+      "Salary": "300000.00"
+    }
+  ]
+}

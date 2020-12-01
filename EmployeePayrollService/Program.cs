@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace EmployeePayrollService
 {
@@ -11,10 +15,14 @@ namespace EmployeePayrollService
             EmployeeRepo employeeRepo = new EmployeeRepo();
             EmployeeModel employeeModel = new EmployeeModel();
             SalaryUpdateModel updateModel = new SalaryUpdateModel();
-            
+
             ///Get All Employee present in Employee_Payroll table
             employeeRepo.GetAllEmployee();
             ///Update Employee Salary
+            employeeModel.SalaryId = 1;
+            employeeModel.SalaryMonth = "Jan";
+            employeeModel.Salary = 500000.00;
+            employeeModel.EmpId = 2;
             employeeRepo.UpdateEmployeeSalary(updateModel);
             ///Get All Employee in a particular data range
             employeeRepo.GetAllEmployeeInADataRange();
@@ -52,6 +60,78 @@ namespace EmployeePayrollService
             employeeRepo.GetEmployeeSalary();
             ///Get Data by Gender using joins
             employeeRepo.GetDataByGroupByGenderER();
+
+            Console.WriteLine("Employee Payroll using Threads");
+            ///retrieve url
+            string[] words = CreateWordArray(@"http://www.gutenberg.org/files/54700/54700-0.txt");
+
+            #region ParallelTasks
+            Parallel.Invoke
+            ( () =>
+            {
+                Console.WriteLine("Begin First Task...");
+                GetLongestWord(words);
+            },
+            () =>
+                {
+                    Console.WriteLine("Begin Second Task...");
+                    GetMostCommonWords(words);
+                }, //close second action
+            () =>
+                {
+                    Console.WriteLine("Begin Third Task...");
+                    GetCountForWord(words,"Sleep");
+                } //close third action
+            ); //close parallel.invoke
+
+            #endregion
+        }
+
+        private static void GetCountForWord(string[] words,string term)
+        {
+            var findWord = from word in words
+                           where word.ToUpper().Contains(term.ToUpper())
+                           select word;
+            Console.WriteLine($@"Task 3 --The word ""{term}"" occurs {findWord.Count()} times");
+        }
+
+        private static void GetMostCommonWords(string[] words)
+        {
+            var frequnecyOrder = from word in words
+                                 where word.Length > 6
+                                 group word by word into g
+                                 orderby g.Count() descending
+                                 select g.Key;
+
+            var commonWords = frequnecyOrder.Take(10);
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Task 2 --The most common words are:");
+            foreach(var v in commonWords)
+            {
+                sb.AppendLine(" " + v);
+            }
+            Console.WriteLine(sb.ToString());
+        }
+
+        private static string GetLongestWord(string[] words)
+        {
+            var longestWord = (from w in words
+                               orderby w.Length descending
+                               select w).First();
+            Console.WriteLine($"Task 1 --The longest word is (longestWord)");
+            return longestWord;
+        }
+
+        static string[] CreateWordArray(string url)
+        {
+            Console.WriteLine($"Retrieveving from {url}");
+            ///download web page 
+            string blog = new WebClient().DownloadString(url);
+            ///separate string into an array of words,removing some common punctuations
+            return blog.Split(
+                new char[] { ' ', ',', '.', ':', ';', '-', '_', '/' },
+                StringSplitOptions.RemoveEmptyEntries);
         }
     }
 }

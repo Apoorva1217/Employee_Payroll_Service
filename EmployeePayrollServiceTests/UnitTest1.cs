@@ -1,13 +1,61 @@
 using EmployeePayrollService;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 
 namespace EmployeePayrollServiceTests
 {
+    public class Employee
+    {
+        public int EmpId { get; set; }
+        public string EmpName { get; set; }
+        public double Salary { get; set; }
+    }
+
     [TestClass]
     public class UnitTest1
     {
+        RestClient client;
+
+        /// <summary>
+        /// Initialize Rest client with localhost:4000
+        /// </summary>
+        [TestInitialize]
+        public void Setup()
+        {
+            client = new RestClient("http://localhost:4000");
+        }
+
+        /// <summary>
+        /// Ability to Retrieve all Employees in EmployeePayroll JSON Server
+        /// </summary>
+        [TestMethod]
+        public void OnCallingList_ReturnEmployeeList()
+        {
+            IRestResponse restResponse = GetEmployeeList();
+            Assert.AreEqual(restResponse.StatusCode, System.Net.HttpStatusCode.OK);
+            List<Employee> employees = JsonConvert.DeserializeObject<List<Employee>>(restResponse.Content);
+            Assert.AreEqual(5, employees.Count);
+
+            foreach(Employee employee in employees)
+            {
+                Console.WriteLine("EmpId:" + employee.EmpId + "\nEmpName:" + employee.EmpName + "\nSalary:" + employee.Salary);
+            }
+        }
+
+        /// <summary>
+        /// Interface to get List of Employees
+        /// </summary>
+        /// <returns></returns>
+        private IRestResponse GetEmployeeList()
+        {
+            RestRequest restRequest = new RestRequest("/employeePayroll", Method.GET);
+            IRestResponse response = client.Execute(restRequest);
+            return response;
+        }
+
         /// <summary>
         /// Given salary details are able to update Salary
         /// </summary>
@@ -20,7 +68,7 @@ namespace EmployeePayrollServiceTests
                 SalaryId = 1,
                 SalaryMonth = "Jan",
                 Salary = 500000,
-                EmpId = 1
+                EmpId = 2
             };
             int EmpSalary = employeeRepo.UpdateEmployeeSalary(updateModel);
             Assert.AreEqual(updateModel.Salary, EmpSalary);
@@ -71,5 +119,7 @@ namespace EmployeePayrollServiceTests
             DateTime stopDateTime = DateTime.Now;
             Console.WriteLine("Duration with thread:" + (stopDateTime - startDateTime));
         }
+
+
     }
 }

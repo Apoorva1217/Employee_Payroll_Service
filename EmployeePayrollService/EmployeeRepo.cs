@@ -472,7 +472,7 @@ namespace EmployeePayrollService
                             Console.WriteLine("EmpId: " + employeeModel.EmpId + "\nSalaryId: " + employeeModel.Salary +
                                 "\nBasic Pay:" + employeeModel.Basic_Pay + "\nDeductions:" + employeeModel.Deductions +
                                 "\nTaxable Pay:" + employeeModel.Taxable_Pay + "\nIncome Pay:" + employeeModel.Income_Tax +
-                                "\nNet Pay:" + employeeModel.Net_Pay + "\nSalary Month" + employeeModel.SalaryMonth);
+                                "\nNet Pay:" + employeeModel.Net_Pay + "\nSalary Month:" + employeeModel.SalaryMonth);
                             Console.WriteLine("\n");
                         }
                     }

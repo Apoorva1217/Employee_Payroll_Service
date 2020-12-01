@@ -1,0 +1,7 @@
+{
+	"/employeePayroll/list": "/employeePayroll",
+	 "/employeePayroll/get/:EmpId": "/employeePayroll/:EmpId",
+	 "/employeePayroll/create": "/employeePayroll",
+	 "/employeePayroll/update/:EmpId": "/employeePayroll/:EmpId",
+	 "/employeePayroll/delete/:EmpId": "/employeePayroll/:EmpId"
+}
