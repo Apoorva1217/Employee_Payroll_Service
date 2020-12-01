@@ -12,7 +12,7 @@ namespace EmployeePayrollServiceTests
     {
         public int EmpId { get; set; }
         public string EmpName { get; set; }
-        public double Salary { get; set; }
+        public string Salary { get; set; }
     }
 
     [TestClass]
@@ -44,7 +44,7 @@ namespace EmployeePayrollServiceTests
 
             foreach(Employee employee in employees)
             {
-                Console.WriteLine("EmpId:" + employee.EmpId + "\nEmpName:" + employee.EmpName + "\nSalary:" + employee.Salary);
+                System.Console.WriteLine("EmpId:" + employee.EmpId + "\nEmpName:" + employee.EmpName + "\nSalary:" + employee.Salary);
             }
         }
 
@@ -72,7 +72,7 @@ namespace EmployeePayrollServiceTests
             RestRequest restRequest = new RestRequest("/employeePayroll", Method.POST);
             JObject jObject = new JObject();
             jObject.Add("EmpName", "Aayush");
-            jObject.Add("Salary", "450000.00");
+            jObject.Add("Salary", "450000");
 
             restRequest.AddParameter("application/json", jObject, ParameterType.RequestBody);
 
@@ -83,8 +83,45 @@ namespace EmployeePayrollServiceTests
             Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.Created);
             Employee employee = JsonConvert.DeserializeObject<Employee>(response.Content);
             Assert.AreEqual("Aayush", employee.EmpName);
-            Assert.AreEqual("450000.00", employee.Salary);
+            Assert.AreEqual("450000", employee.Salary);
             System.Console.WriteLine(response.Content);
+        }
+
+        /// <summary>
+        /// Ability to Add multiple Employees to the EmployeePayroll JSON Server
+        /// </summary>
+        [TestMethod]
+        public void GivenMultipleEmployee_OnPost_ShouldReturnCount()
+        {
+            List<Employee> employeeList = new List<Employee>();
+            employeeList.Add(new Employee { EmpName = "Shubham", Salary = "500000" });
+            employeeList.Add(new Employee { EmpName = "Aarya", Salary = "450000" });
+            employeeList.ForEach(employeeData =>
+            {
+                ///Arrange
+                RestRequest restRequest = new RestRequest("/employeePayroll", Method.POST);
+                JObject jObject = new JObject();
+                jObject.Add("EmpName", employeeData.EmpName);
+                jObject.Add("Salary", employeeData.Salary);
+
+                restRequest.AddParameter("application/json", jObject, ParameterType.RequestBody);
+
+                ///Act
+                IRestResponse response = client.Execute(restRequest);
+
+                ///Assert
+                Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.Created);
+                Employee employee = JsonConvert.DeserializeObject<Employee>(response.Content);
+                Assert.AreEqual(employeeData.EmpName, employee.EmpName);
+                Assert.AreEqual(employeeData.Salary, employee.Salary);
+                System.Console.WriteLine(response.Content);
+            });
+            IRestResponse restResponse = GetEmployeeList();
+
+            ///Assert
+            Assert.AreEqual(restResponse.StatusCode, System.Net.HttpStatusCode.OK);
+            List<Employee> employees = JsonConvert.DeserializeObject<List<Employee>>(restResponse.Content);
+            Assert.AreEqual(7, employees.Count);
         }
 
         /// <summary>
