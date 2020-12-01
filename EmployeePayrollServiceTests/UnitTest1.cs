@@ -1,6 +1,7 @@
 using EmployeePayrollService;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -35,6 +36,8 @@ namespace EmployeePayrollServiceTests
         public void OnCallingList_ReturnEmployeeList()
         {
             IRestResponse restResponse = GetEmployeeList();
+            
+            ///Assert
             Assert.AreEqual(restResponse.StatusCode, System.Net.HttpStatusCode.OK);
             List<Employee> employees = JsonConvert.DeserializeObject<List<Employee>>(restResponse.Content);
             Assert.AreEqual(5, employees.Count);
@@ -51,9 +54,37 @@ namespace EmployeePayrollServiceTests
         /// <returns></returns>
         private IRestResponse GetEmployeeList()
         {
+            ///Arrange
             RestRequest restRequest = new RestRequest("/employeePayroll", Method.GET);
+            
+            ///Act
             IRestResponse response = client.Execute(restRequest);
             return response;
+        }
+
+        /// <summary>
+        /// Ability to add a new Employee to the EmployeePayroll JSON Server
+        /// </summary>
+        [TestMethod]
+        public void GivenEmployee_OnPost_ShouldReturnEmployee()
+        {
+            ///Arrange
+            RestRequest restRequest = new RestRequest("/employeePayroll", Method.POST);
+            JObject jObject = new JObject();
+            jObject.Add("EmpName", "Aayush");
+            jObject.Add("Salary", "450000.00");
+
+            restRequest.AddParameter("application/json", jObject, ParameterType.RequestBody);
+
+            ///Act
+            IRestResponse response = client.Execute(restRequest);
+
+            ///Assert
+            Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.Created);
+            Employee employee = JsonConvert.DeserializeObject<Employee>(response.Content);
+            Assert.AreEqual("Aayush", employee.EmpName);
+            Assert.AreEqual("450000.00", employee.Salary);
+            System.Console.WriteLine(response.Content);
         }
 
         /// <summary>
