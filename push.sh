@@ -2,7 +2,7 @@ read a
 git branch $a
 git checkout $a
 git add .
-git commit -m "[Apoorva] Add . Ability to Update Salary in EmployeePayroll JSON Server"
+git commit -m "[Apoorva] Add . Ability to Delete Employee from EmployeePayroll JSON Server"
 git push origin $a
 git checkout master
 git merge $a

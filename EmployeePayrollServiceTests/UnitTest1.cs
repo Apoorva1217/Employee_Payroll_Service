@@ -148,6 +148,23 @@ namespace EmployeePayrollServiceTests
         }
 
         /// <summary>
+        /// Ability to Delete Employee from EmployeePayroll JSON Server
+        /// </summary>
+        [TestMethod]
+        public void GivenEmployeeId_OnDelete_ShouldReturnSuccessStatus()
+        {
+            ///Arrange
+            RestRequest restRequest = new RestRequest("/employeePayroll/5", Method.DELETE);
+
+            ///Act
+            IRestResponse response = client.Execute(restRequest);
+
+            ///Assert
+            Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.OK);
+            System.Console.WriteLine(response.Content);
+        }
+
+        /// <summary>
         /// Given salary details are able to update Salary
         /// </summary>
         [TestMethod]
