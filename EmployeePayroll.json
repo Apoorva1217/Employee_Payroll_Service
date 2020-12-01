@@ -15,11 +15,12 @@
       "EmpName": "Terisa",
       "Salary": "400000.00"
     },
-	{
+    {
       "EmpId": 4,
       "EmpName": "Mark",
       "Salary": "600000.00"
-    },{
+    },
+    {
       "EmpId": 5,
       "EmpName": "Charlie",
       "Salary": "300000.00"

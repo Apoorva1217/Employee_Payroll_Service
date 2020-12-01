@@ -125,6 +125,29 @@ namespace EmployeePayrollServiceTests
         }
 
         /// <summary>
+        /// Ability to Update Salary in EmployeePayroll JSON Server
+        /// </summary>
+        [TestMethod]
+        public void GivenEmployee_OnUpdate_ShouldReturnUpdatedEmployee()
+        {
+            ///Arrange
+            RestRequest restRequest = new RestRequest("/employeePayroll", Method.PUT);
+            JObject jObject = new JObject();
+            jObject.Add("EmpName", "Bill");
+            jObject.Add("Salary", "400000");
+
+            restRequest.AddParameter("application/json", jObject, ParameterType.RequestBody);
+
+            var response = client.Execute(restRequest);
+
+            Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.OK);
+            Employee employee = JsonConvert.DeserializeObject<Employee>(response.Content);
+            Assert.AreEqual("Bill", employee.EmpName);
+            Assert.AreEqual("400000", employee.Salary);
+            System.Console.WriteLine(response.Content);
+        }
+
+        /// <summary>
         /// Given salary details are able to update Salary
         /// </summary>
         [TestMethod]
